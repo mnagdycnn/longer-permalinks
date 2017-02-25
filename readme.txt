@@ -34,7 +34,7 @@ Long permalinks will now work.
 == Frequently Asked Questions ==
 
 = What can I do with this plugin? =
-You can enjoy 3000 characters in your slugs (default is 200 characters). 
+You can enjoy a lot more characters in your slugs without the default core limitation and have core compatibility at the same time.
 
 == Screenshots ==
 
