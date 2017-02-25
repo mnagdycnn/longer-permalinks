@@ -12,8 +12,7 @@ Extend your WP slugs to allow more characters.
 
 == Description ==
 
-This plugin allows you to use much more characters in your titles and slug. There is a 200 chars limitation on WordPress
-core nowaways. This limit is raised to 3000 with this plugin, in a way compatible to future WordPress core updates.
+This plugin allows you to use much more characters in your titles and slug. There is a 200 chars limitation on WordPress core nowaways. This limit is raised to 3000 with this plugin, in a way compatible to future WordPress core updates.
 Long permalinks will now work.
 
 = Features =
