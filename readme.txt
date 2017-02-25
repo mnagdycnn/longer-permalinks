@@ -21,7 +21,7 @@ Long permalinks will now work.
 
 == Installation ==
 
-1. Upload plugin folder to the `/wp-content/plugins/` directory.
+1. Upload plugin folder to the `/wp-content/plugins/slug-length-extender/` directory.
 2. Activate the plugin through the 'Plugins' menu in WordPress.
 3. That's it!
 
