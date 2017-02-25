@@ -8,11 +8,13 @@ Stable tag: 0.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-This plugin extends slug length (in characters) from default 200 to 3000. Long permalinks will now work.
+Extend your WP slugs to allow more characters.
 
 == Description ==
 
-	
+This plugin allows you to use much more characters in your titles and slug. There is a 200 chars limitation on WordPress
+core nowaways. This limit is raised to 3000 with this plugin, in a way compatible to future WordPress core updates.
+Long permalinks will now work.
 
 = Features =
 * Uppon activation the available slug length will become 3000.
