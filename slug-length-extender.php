@@ -61,7 +61,7 @@ function redefine_sanitize_title_with_dashes() {
 
 function slug_length_extender_plugin_install() {
 	require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
-	//Create custom table
+	//update posts table field length
 	$sql="ALTER TABLE {$wpdb->prefix}posts modify post_name varchar(3000);";
 	$wpdb->query($sql);
 }
