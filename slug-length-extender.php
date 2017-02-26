@@ -10,7 +10,7 @@ Description: This plugin extends slug length (in characters) from default 200 to
 
 Author: Giannis Economou
 
-Version: 0.1
+Version: 0.2
 
 Author URI: http://www.antithesis.gr
 
@@ -48,7 +48,7 @@ function redefine_sanitize_title_with_dashes() {
 	$body = implode("", array_slice($source, $start_line, $length));
 
 	$body = preg_replace('/function sanitize_title_with_dashes/','function slug_length_extender_sanitize_title_with_dashes',$body);
-	$body = preg_replace('/\$title = utf8_uri_encode\(\$title\, 200\);/','utf8_uri_encode($title, 3000);',$body);
+	$body = preg_replace('/\$title = utf8_uri_encode\(\$title\, 200\);/','$title = utf8_uri_encode($title, 3000);',$body);
 
 	if (strlen($body) > 0) {
 		$body = '<' . "?php\n" .$body;
