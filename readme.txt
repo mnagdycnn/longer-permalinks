@@ -8,7 +8,7 @@ Stable tag: 0.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Extend your WP slugs to allow more characters.
+Extend your WP slugs and titles to allow more characters. Useful for long permalinks on languages using non-latin characters.
 
 == Description ==
 
@@ -16,7 +16,7 @@ This plugin allows you to use much more characters in your titles and slug. Ther
 Long permalinks will now work.
 
 = Features =
-* Uppon activation the available slug length will become 3000.
+* Uppon activation the available slug (post title) length will become 3000.
 
 
 == Installation ==
@@ -26,6 +26,9 @@ Long permalinks will now work.
 3. That's it!
 
 == Changelog ==
+
+= 0.3 =
+* Added some tests, making it a but more robust
 
 = 0.2 =
 * Bug fix
