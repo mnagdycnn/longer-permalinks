@@ -22,7 +22,7 @@ Your long permalinks will now work with this plugin.
 
 = Features =
 * Uppon activation the available slug length (post title) will become 3000, allowing long permalinks.
-* Required functionality is always extending only the current/latest core functionality. 
+* Required functionality is always automatically applied by extending your current core code (even in future updates).
 
 
 == Installation ==
