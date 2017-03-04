@@ -6,7 +6,9 @@ Plugin Name: Slug length extender
 
 Plugin URI: https://github.com/gecon/slug-length-extender/archive/master.zip
 
-Description: This plugin allows long permalinks by extending slug length (post_name) from default 200 to 3000. Useful for permalinks using non latin characters in URLs. Long permalinks will now work.
+Description: This plugin allows long permalinks by extending slug length (post_name) from default 200 to 3000. 
+In a way that is future WordPress core updates compatible, by extending always the current/installed core functionality.
+Useful for permalinks using non latin characters in URLs. Long permalinks will now work.
 
 Author: Giannis Economou
 
