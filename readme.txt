@@ -14,7 +14,11 @@ Useful for long permalinks on languages using non-latin characters.
 
 == Description ==
 
-This plugin allows you to use much more characters in your titles and slug, in a way that is future compatible as much as possible with future updates of WordPress core. There is a 200 chars limitation on WordPress core nowadays. This limit is raised to 3000. Plugin respects core functionality by automatically extending your current WordPress core only. Your long permalinks will now work with this plugin.
+This plugin allows you to use much more characters in your titles and slug,
+in a way that is future compatible as much as possible with future updates of WordPress core. 
+There is a 200 chars limitation on WordPress core nowadays. This limit is raised to 3000. 
+Plugin respects core functionality by automatically extending your current WordPress core only.
+Your long permalinks will now work with this plugin.
 
 = Features =
 * Uppon activation the available slug length (post title) will become 3000, allowing long permalinks.
