@@ -4,7 +4,7 @@ Author link: http://www.antithesis.gr
 Tags: greek, permalinks, post_name, slugs, titles, translations, i18n, length, size
 Requires at least: 4.0
 Tested up to: 4.7.2
-Stable tag: 0.2
+Stable tag: 0.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
