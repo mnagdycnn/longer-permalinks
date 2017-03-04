@@ -67,9 +67,8 @@ function redefine_sanitize_title_with_dashes() {
 
 	if (strlen($body) > 0) {
 		$body = '<' . "?php\n" .$body;
-		$outfile = WP_PLUGIN_DIR."/slug-length-extender/sanitize_override.inc"; 
-		file_put_contents($outfile, $body);
-		fclose ($outfile);
+		file_put_contents(REDEF_FILE, $body);
+		fclose (REDEF_FILE);
 	}
 	return 1;
 }
