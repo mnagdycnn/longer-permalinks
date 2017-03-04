@@ -4,7 +4,7 @@
 
 Plugin Name: Slug length extender
 
-Plugin URI: http://www.antithesis.gr/slug-length-extender.zip
+Plugin URI: https://github.com/gecon/slug-length-extender/archive/master.zip
 
 Description: This plugin allows long permalinks by extending slug length (post_name) from default 200 to 3000. Useful for permalinks using non latin characters in URLs. Long permalinks will now work.
 
