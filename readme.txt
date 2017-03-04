@@ -1,7 +1,7 @@
 === Slug Length Extender ===
 Contributors: Giannis Economou
 Author link: http://www.antithesis.gr
-Tags: greek, greek permalinks, slugs, translations, i18n 
+Tags: greek, permalinks, slugs, titles, translations, i18n, length, size
 Requires at least: 4.0
 Tested up to: 4.7.2
 Stable tag: 0.2
