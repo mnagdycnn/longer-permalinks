@@ -34,7 +34,7 @@ Your long permalinks will now work with this plugin.
 == Changelog ==
 
 = 0.3 =
-* Added some tests, making it a but more robust
+* Handle errors making it more robust
 
 = 0.2 =
 * Bug fix
