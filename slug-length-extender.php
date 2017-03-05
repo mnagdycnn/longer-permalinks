@@ -33,9 +33,8 @@ else { $redefined = 1; }
 if ($redefined) {
 	include(REDEF_FILE);
 
-	// remove standard filter
+	// replace the standard filter
 	remove_filter( 'sanitize_title', 'sanitize_title_with_dashes' );
-	// add our custom filter
 	add_filter( 'sanitize_title', 'slug_length_extender_sanitize_title_with_dashes', 10, 3 );
 
 	//update wp version
@@ -99,4 +98,3 @@ function slug_length_extender_plugin_install() {
 		trigger_error( _e('Plugin requires at least MySQL 5.0.3 - Activation Failed'), E_USER_ERROR );
 	}
 }
-
