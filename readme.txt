@@ -4,7 +4,7 @@ Author link: http://www.antithesis.gr
 Tags: greek, permalinks, post_name, slugs, titles, translations, i18n, length, size
 Requires at least: 4.0
 Tested up to: 4.7.2
-Stable tag: 0.3
+Stable tag: 0.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -32,6 +32,9 @@ Your long permalinks will now work with this plugin.
 3. That's it!
 
 == Changelog ==
+
+= 0.9 =
+* Testing, testing, testing
 
 = 0.3 =
 * Handle errors making it more robust
