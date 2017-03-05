@@ -1,10 +1,10 @@
 === Slug Length Extender ===
 Contributors: antithesisgr
 Author link: http://www.antithesis.gr
-Tags: permalinks, post_name, long, slugs, title, permalinks length, titles, non-latin, length, size, slug length, permalinks limitation
+Tags: permalinks, post_name, long, slugs, title, permalinks length, titles, non-latin, length, size, slug length, permalinks limitation, long url, long slug
 Requires at least: 4.0
 Tested up to: 4.7.2
-Stable tag: 0.95
+Stable tag: 0.96
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -32,6 +32,9 @@ Your long permalinks will now work with this plugin.
 3. That's it!
 
 == Changelog ==
+
+= 0.96 =
+* Readme changes
 
 = 0.95 =
 * Readme changes
