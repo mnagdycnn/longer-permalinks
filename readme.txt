@@ -1,7 +1,7 @@
 === Slug Length Extender ===
 Contributors: antithesisgr
 Author link: http://www.antithesis.gr
-Tags: greek, permalinks, post_name, slugs, titles, translations, i18n, length, size
+Tags: permalinks, post_name, long, slugs, title, titles, non-latin, length, size
 Requires at least: 4.0
 Tested up to: 4.7.2
 Stable tag: 0.9
