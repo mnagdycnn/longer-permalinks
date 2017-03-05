@@ -12,7 +12,7 @@ Useful for permalinks using non latin characters in URLs. Long permalinks will n
 
 Author: Giannis Economou
 
-Version: 0.9
+Version: 0.95
 
 Author URI: http://www.antithesis.gr
 
@@ -89,7 +89,7 @@ function slug_length_extender_notice__error_file_write_access() {
 }
 
 function slug_length_extender_plugin_install() {
-	if ( ! current_user_can( 'activate_plugins' ) )
+	if ( !current_user_can( 'activate_plugins' ) )
 	        return;
 
 	require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
