@@ -8,10 +8,7 @@ Stable tag: 0.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Extend your WP slugs and titles to allow more characters. 
-Useful for long permalinks on languages using non-latin characters.
-Plugin is build in a future compatible way (relevant WordPress core updates are always respected).
-(Required at least MySQL 5.0.3)
+Allow long permalinks in your WordPress. Useful especially for using non-latin characters in permalinks. Respects all future relevant core updates.
 
 == Description ==
 
@@ -20,6 +17,7 @@ in a way that is future compatible as much as possible with future updates of Wo
 There is a 200 chars limitation on WordPress core nowadays. This limit is raised to 3000. 
 Plugin is always extending only your current WordPress core code, even after core updates.
 Your long permalinks will now work with this plugin.
+(Required at least MySQL 5.0.3)
 
 = Features =
 * Uppon activation the available slug length (post title) will become 3000, allowing long permalinks.
