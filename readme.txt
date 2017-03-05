@@ -9,7 +9,7 @@ License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 Allow long permalinks in your WordPress. Useful especially for using non-latin characters in permalinks. 
-Respects all future relevant core updates.
+Respects future relevant core updates.
 
 == Description ==
 
