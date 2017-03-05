@@ -15,7 +15,7 @@ Respects future relevant core updates.
 
 This plugin allows you to use much more characters in your titles and slug,
 in a way that is future compatible as much as possible with future updates of WordPress core. 
-There is a 200 chars limitation on WordPress core nowadays. This limit is raised to 3000. 
+There is a 200 characters limitation on WordPress core nowadays. This limit is raised to 3000. 
 Plugin is always extending only your current WordPress core code, even after core updates.
 Your long permalinks will now work with this plugin.
 
