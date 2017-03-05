@@ -1,5 +1,5 @@
 === Slug Length Extender ===
-Contributors: Giannis Economou
+Contributors: antithesisgr
 Author link: http://www.antithesis.gr
 Tags: greek, permalinks, post_name, slugs, titles, translations, i18n, length, size
 Requires at least: 4.0
