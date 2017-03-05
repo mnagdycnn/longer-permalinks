@@ -18,12 +18,12 @@ in a way that is future compatible as much as possible with future updates of Wo
 There is a 200 chars limitation on WordPress core nowadays. This limit is raised to 3000. 
 Plugin is always extending only your current WordPress core code, even after core updates.
 Your long permalinks will now work with this plugin.
-(Required at least MySQL 5.0.3)
+
 
 = Features =
 * Uppon activation the available slug length (post title) will become 3000, allowing long permalinks.
-* Required functionality is always automatically applied by extending your current core code (even in future updates).
-
+* Required functionality is automatically applied in your current core code (even after future WordPress updates).
+* Plugin requires at least MySQL 5.0.3
 
 == Installation ==
 
@@ -34,10 +34,10 @@ Your long permalinks will now work with this plugin.
 == Changelog ==
 
 = 0.9 =
-* Testing, testing, testing
+* More testing
 
 = 0.3 =
-* Handle errors making it more robust
+* Graceful handling of any errors
 
 = 0.2 =
 * Bug fix
@@ -49,7 +49,7 @@ Your long permalinks will now work with this plugin.
 == Frequently Asked Questions ==
 
 = What can I do with this plugin? =
-You can enjoy a lot more characters in your slugs without the default core limitation and have core compatibility at the same time.
+You can enjoy a lot more characters in your slugs and permalinks, without the default core limitation and have future core compatibility at the same time.
 
 == Screenshots ==
 
