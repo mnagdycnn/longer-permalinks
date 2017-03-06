@@ -77,14 +77,14 @@ function redefine_sanitize_title_with_dashes() {
 function longer_permalinks_notice__error_dir_write_access() {
     echo '<div class="notice notice-error is-dismissible"><p>';
     echo _e('Could not write into plugin directory.') . REDEF_FILE ."<br>";
-    echo _e("Plugin slug length extender will not work. Please make plugin directory writable.");
+    echo _e("Plugin Longer Permalinks will not work. Please make plugin directory writable.");
     echo '</p></div>';
 }
 
 function longer_permalinks_notice__error_file_write_access() {
     echo '<div class="notice notice-error is-dismissible"><p>';
     echo _e('Could not write file ') . REDEF_FILE ."<br>";
-    echo _e("Plugin slug length extender will not work. Please make file writable.");
+    echo _e("Plugin Longer Permalinks will not work. Please make file writable.");
     echo '</p></div>';
 }
 
