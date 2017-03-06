@@ -4,7 +4,7 @@ Author link: http://www.antithesis.gr
 Tags: permalinks, long, slugs, slugs length, long title, post_name size, titles, non-latin, url, permalinks limitation, long url, long slug
 Requires at least: 4.0
 Tested up to: 4.7.3
-Stable tag: 1.1
+Stable tag: 1.11
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -13,7 +13,7 @@ Respects future relevant core updates.
 
 == Description ==
 
-This plugin allows you to use much more characters in your titles and slug,in a way that is future compatible as much as possible with future updates of WordPress core. 
+This plugin allows you to use longer URLs (permalinks), by allowing much more characters in your titles and slug. Done in a way that is future compatible as much as possible with future updates of WordPress core. 
 There is a 200 characters limitation on WordPress core nowadays. This limit is raised to 3000. 
 Plugin is always extending only your current WordPress core code, even after core updates.
 Your long permalinks will now work. 
@@ -32,6 +32,9 @@ This plugin is really useful especially in non-latin slugs because of the requir
 3. That's it!
 
 == Changelog ==
+
+= 1.11 =
+* Minor changes
 
 = 1.1 =
 * Tested on 4.7.3
