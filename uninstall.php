@@ -8,5 +8,5 @@ if (!defined('WP_UNINSTALL_PLUGIN')) {
 if ( ! current_user_can( 'activate_plugins' ) )
        return;
  
-$option_name = 'slug-length-extender-wpver';
+$option_name = 'longer-permalinks-wpver';
 delete_option($option_name);
