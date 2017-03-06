@@ -1,4 +1,4 @@
-=== Slug Length Extender ===
+=== Longer Permalinks ===
 Contributors: antithesisgr
 Author link: http://www.antithesis.gr
 Tags: permalinks, post_name, long, slugs, title, permalinks length, titles, non-latin, length, size, slug length, permalinks limitation, long url, long slug
