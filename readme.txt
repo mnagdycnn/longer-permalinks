@@ -47,6 +47,8 @@ This plugin is really useful especially in non-latin slugs because of the requir
 
 = What can I do with this plugin? =
 You can enjoy a lot more characters in your slugs and permalinks, without the default core limitation and have future core compatibility at the same time.
+= What do you mean by "future core compatibility"? =
+The plugin is using PHP reflection to dynamically apply the required changes in WordPress core every time you update your WordPress. It automatically detects any WordPress updates and reapplies the required changes anytime this is needed.
 
 == Screenshots ==
 
