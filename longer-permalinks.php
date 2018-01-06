@@ -77,7 +77,7 @@ function redefine_sanitize_title_with_dashes() {
 		add_action('admin_notices','longer_permalinks_notice__error_unexpected');
 	}
 	else { 
-		//could not apply core changes - new WordPress version probably (A LOT different on sanitize_title_with_dashes)
+		//could not apply core changes - new WordPress version probably (keypoint differences on sanitize_title_with_dashes)
 		add_action('admin_notices','longer_permalinks_notice__error_extending_core');
 	}
 	return 0;
