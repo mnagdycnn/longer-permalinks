@@ -33,6 +33,9 @@ This plugin is really useful especially in non-latin slugs because of the requir
 
 == Changelog ==
 
+= 1.13 =
+* Bug fix, fclose was not needed.
+
 = 1.12 =
 * Bug fix, $wpdb was not global.
 

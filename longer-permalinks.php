@@ -12,7 +12,7 @@ Useful for permalinks using non latin characters in URLs. Long permalinks will n
 
 Author: Giannis Economou
 
-Version: 1.12
+Version: 1.13
 
 Author URI: http://www.antithesis.gr
 
@@ -70,7 +70,6 @@ function redefine_sanitize_title_with_dashes() {
 	if (strlen($body) > 0) {
 		$body = '<' . "?php\n" .$body;
 		file_put_contents(REDEF_FILE, $body);
-		fclose (REDEF_FILE);
 	}
 	return 1;
 }
