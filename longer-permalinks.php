@@ -12,7 +12,7 @@ Useful for permalinks using non latin characters in URLs. Long permalinks will n
 
 Author: Giannis Economou
 
-Version: 1.11
+Version: 1.12
 
 Author URI: http://www.antithesis.gr
 
@@ -28,9 +28,10 @@ $current_wp_ver = get_bloginfo('version');
 
 $redefined = 0;
 if ( !file_exists (REDEF_FILE) || ($last_wp_ver != $current_wp_ver) ) {
-		$redefined = redefine_sanitize_title_with_dashes();
+	$redefined = redefine_sanitize_title_with_dashes();
+} else {
+	$redefined = 1;
 }
-else { $redefined = 1; }
 
 if ($redefined) {
 	include(REDEF_FILE);
@@ -89,10 +90,14 @@ function longer_permalinks_notice__error_file_write_access() {
 }
 
 function longer_permalinks_plugin_install() {
-	if ( !current_user_can( 'activate_plugins' ) )
-	        return;
+	global $wpdb;
+
+	if ( !current_user_can( 'activate_plugins' ) ) {
+        return;
+	}
 
 	require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+
 	//update posts table field length
 	$sql="ALTER TABLE {$wpdb->prefix}posts modify post_name varchar(3000);";
 	$wpdb->query($sql);
