@@ -37,6 +37,7 @@ This plugin is really useful especially in non-latin slugs because of the requir
 * Provide more thorough admin output on edge cases
 * Icon added
 * FAQ updated
+* Minor speed improvement
 * Tested on 4.9.1
 
 = 1.13 =

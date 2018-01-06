@@ -40,8 +40,9 @@ if ($redefined) {
 	remove_filter( 'sanitize_title', 'sanitize_title_with_dashes' );
 	add_filter( 'sanitize_title', 'longer_permalinks_sanitize_title_with_dashes', 10, 3 );
 
-	//update wp version
-	update_option( 'longer-permalinks-wpver', $current_wp_ver );
+	//update wp version if needed
+	if ($last_wp_ver !=  $current_wp_ver) 
+		update_option( 'longer-permalinks-wpver', $current_wp_ver );
 }
 
 
