@@ -12,7 +12,7 @@ Useful for permalinks using non latin characters in URLs. Long permalinks will n
 
 Author: Giannis Economou
 
-Version: 1.13
+Version: 1.14
 
 Author URI: http://www.antithesis.gr
 
