@@ -65,13 +65,22 @@ function redefine_sanitize_title_with_dashes() {
 	$body = implode("", array_slice($source, $start_line, $length));
 
 	$body = preg_replace('/function sanitize_title_with_dashes/','function longer_permalinks_sanitize_title_with_dashes',$body);
-	$body = preg_replace('/\$title = utf8_uri_encode\(\$title\, 200\);/','$title = utf8_uri_encode($title, 3000);',$body);
-
-	if (strlen($body) > 0) {
-		$body = '<' . "?php\n" .$body;
-		file_put_contents(REDEF_FILE, $body);
+	$body = preg_replace('/\$title = utf8_uri_encode\(\$title\, 200\);/','$title = utf8_uri_encode($title, 3000);',$body, -1, $success);
+	
+	if ($success) {
+		if (strlen($body) > 0) {
+			$body = '<' . "?php\n" .$body;
+			file_put_contents(REDEF_FILE, $body);
+			return 1;
+		}
+		//indeed unexpected
+		add_action('admin_notices','longer_permalinks_notice__error_unexpected');
 	}
-	return 1;
+	else { 
+		//could not apply core changes - new WordPress version probably (A LOT different on sanitize_title_with_dashes)
+		add_action('admin_notices','longer_permalinks_notice__error_extending_core');
+	}
+	return 0;
 }
 
 function longer_permalinks_notice__error_dir_write_access() {
@@ -88,12 +97,26 @@ function longer_permalinks_notice__error_file_write_access() {
     echo '</p></div>';
 }
 
+function longer_permalinks_notice__error_extending_core() {
+    echo '<div class="notice notice-error is-dismissible"><p>';
+    echo _e('Could not apply required functionality to core'). "<br>";
+    echo _e("Plugin Longer Permalinks could not extend required core functionality. The plugin seems not compatible with your WordPress version. Please contact developer about it.");
+    echo '</p></div>';
+}
+
+function longer_permalinks_notice__error_unexpected() {
+    echo '<div class="notice notice-error is-dismissible"><p>';
+    echo _e('Could not apply required functionality to core'). "<br>";
+    echo _e("Plugin Longer Permalinks could not extend required core functionality, due to an unexpected error. Please contact developer about it.");
+    echo '</p></div>';
+}
+
+
 function longer_permalinks_plugin_install() {
 	global $wpdb;
 
-	if ( !current_user_can( 'activate_plugins' ) ) {
-        return;
-	}
+	if ( !current_user_can( 'activate_plugins' ) ) 
+        	return;
 
 	require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 
