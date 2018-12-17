@@ -34,8 +34,8 @@ This plugin is really useful especially in non-latin slugs because of the requir
 == Changelog ==
 
 = 1.15 =
-* Major update: long permalinks suvrive the WordPress 5.0 upgrade db schema reset / slugs db field truncation.
 * IMPORTANT: Please update plugin to latest version BEFORE upgrading your WordPress to 5.x if you want to avoid truncated long permalinks.
+* Plugin Major update: long permalinks suvrive the WordPress 5.0 upgrade.
 
 = 1.14 =
 * Provide more thorough admin output on edge cases
