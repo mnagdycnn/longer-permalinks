@@ -12,7 +12,7 @@ Useful for permalinks using non latin characters in URLs. Long permalinks will n
 
 Author: Giannis Economou
 
-Version: 1.14
+Version: 1.15
 
 Author URI: http://www.antithesis.gr
 
@@ -20,31 +20,86 @@ Author URI: http://www.antithesis.gr
 
 defined( 'ABSPATH' ) OR exit;
 
+define('LONGER_PERMALINKS_PLUGIN_VERSION', "115");
+
 define('REDEF_FILE', WP_PLUGIN_DIR."/longer-permalinks/sanitize_override.inc");
 register_activation_hook( __FILE__, 'longer_permalinks_plugin_install' );
 
 $last_wp_ver = get_option('longer-permalinks-wpver');
 $current_wp_ver = get_bloginfo('version');
 
+$last_plugin_ver = get_option('longer-permalinks-pluginver');
+
+
 $redefined = 0;
 if ( !file_exists (REDEF_FILE) || ($last_wp_ver != $current_wp_ver) ) {
+	longer_permalinks_alter_post_name_length();
 	$redefined = redefine_sanitize_title_with_dashes();
 } else {
 	$redefined = 1;
 }
-
 if ($redefined) {
 	include(REDEF_FILE);
 
 	// replace the standard filter
 	remove_filter( 'sanitize_title', 'sanitize_title_with_dashes' );
 	add_filter( 'sanitize_title', 'longer_permalinks_sanitize_title_with_dashes', 10, 3 );
-
-	//update wp version if needed
-	if ($last_wp_ver !=  $current_wp_ver) 
-		update_option( 'longer-permalinks-wpver', $current_wp_ver );
 }
 
+//updating plugin from 1.14-
+if ( empty($last_plugin_ver) || ($last_plugin_ver == '') ) {
+	//backup all post-names so far
+	longer_permalinks_backup_existing_postnames();
+}
+
+if ($last_plugin_ver != LONGER_PERMALINKS_PLUGIN_VERSION) {
+	//nothine extra yet...
+	update_option( 'longer-permalinks-pluginver', LONGER_PERMALINKS_PLUGIN_VERSION );
+}
+
+if  ($last_wp_ver != $current_wp_ver) {
+	// restore longer permalinks in case of wp upgrade
+	// applying default wp db schema on upgrade will truncate post_name
+	// we cannot filter anything on upgrade process, so we revert our longer slugs
+	longer_permalinks_revert_longer_titles();
+
+        if ($last_wp_ver !=  $current_wp_ver)
+	        update_option( 'longer-permalinks-wpver', $current_wp_ver );
+}
+
+//keep our longer slugs backups on post updates
+add_action('save_post', 'longer_permalinks_backup_post_name_on_update', 10,2);
+add_action('wp_insert_post', 'longer_permalinks_backup_post_name_on_update', 10,2);
+//add_action('post_updated', 'longer_permalinks_backup_post_name_on_update', 10, 3); 
+//add_filter('wp_unique_post_slug','longer_permalinks_backup_the_slug',10,6);
+
+/*function longer_permalinks_backup_the_slug($slug, $post_ID, $post_status, $post_type, $post_parent, $original_slug) {
+	update_post_meta($post_ID, 'longer-permalinks-post-name-longer', $slug);
+	return $slug;
+}*/
+
+function longer_permalinks_backup_post_name_on_update($post_ID, $post_after) {
+        update_post_meta($post_ID, 'longer-permalinks-post-name-longer', $post_after->post_name);
+}
+
+
+function longer_permalinks_revert_longer_titles() {
+        global $wpdb;
+
+	//using direct sql for speed, avoid long delays on sites with a lot of posts
+	$sql = "UPDATE {$wpdb->prefix}posts p JOIN {$wpdb->prefix}postmeta m ON m.post_id = p.ID SET p.post_name = m.meta_value WHERE m.meta_key = 'longer-permalinks-post-name-longer';";
+	$wpdb->query($sql);
+
+}
+
+function longer_permalinks_backup_existing_postnames() {
+        global $wpdb;
+
+	//using direct sql for speed, avoid delays on sites with a lot of posts
+        $sql="INSERT INTO {$wpdb->prefix}postmeta (post_id, meta_key, meta_value) SELECT ID, 'longer-permalinks-post-name-longer', {$wpdb->prefix}posts.post_name FROM {$wpdb->prefix}posts";
+        $wpdb->query($sql);
+	
+}
 
 function redefine_sanitize_title_with_dashes() {
 	if ( !is_writable( dirname(REDEF_FILE) ) ) {
@@ -119,12 +174,21 @@ function longer_permalinks_plugin_install() {
 	if ( !current_user_can( 'activate_plugins' ) ) 
         	return;
 
-	require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+	longer_permalinks_alter_post_name_length();
 
-	//update posts table field length
-	$sql="ALTER TABLE {$wpdb->prefix}posts modify post_name varchar(3000);";
-	$wpdb->query($sql);
-	if($wpdb->last_error !== '') {
-		trigger_error( _e('Plugin requires at least MySQL 5.0.3 - Activation Failed'), E_USER_ERROR );
-	}
 }
+
+//update posts table field length
+function longer_permalinks_alter_post_name_length() {
+	global $wpdb;
+	
+        $sql = "CREATE TABLE {$wpdb->prefix}posts (post_name varchar(3000) NOT NULL default '');";
+
+	require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+	dbDelta( $sql );
+
+        if($wpdb->last_error !== '') {
+                trigger_error( _e('Plugin requires at least MySQL 5.0.3 - Plugin will fail'), E_USER_ERROR );
+        }
+}
+
