@@ -12,7 +12,7 @@ Useful for permalinks using non latin characters in URLs. Long permalinks will n
 
 Author: Giannis Economou
 
-Version: 1.15
+Version: 1.16
 
 Author URI: http://www.antithesis.gr
 
@@ -121,7 +121,7 @@ function redefine_sanitize_title_with_dashes() {
 	$body = implode("", array_slice($source, $start_line, $length));
 
 	$body = preg_replace('/function sanitize_title_with_dashes/','function longer_permalinks_sanitize_title_with_dashes',$body);
-	$body = preg_replace('/\$title = utf8_uri_encode\(\$title\, 200\);/','$title = utf8_uri_encode($title, 3000);',$body, -1, $success);
+	$body = preg_replace('/\$title = utf8_uri_encode\( ?\$title\, 200\ ?\);/','$title = utf8_uri_encode($title, 3000);',$body, -1, $success);
 	
 	if ($success) {
 		if (strlen($body) > 0) {
