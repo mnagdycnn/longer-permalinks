@@ -8,5 +8,6 @@ if (!defined('WP_UNINSTALL_PLUGIN')) {
 if ( ! current_user_can( 'activate_plugins' ) )
        return;
  
-$option_name = 'longer-permalinks-wpver';
-delete_option($option_name);
+delete_option('longer-permalinks-pluginver');
+delete_option('longer-permalinks-wpver');
+delete_option('longer-permalinks-dbver');

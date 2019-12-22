@@ -12,7 +12,7 @@ Useful for permalinks using non latin characters in URLs. Long permalinks will n
 
 Author: Giannis Economou
 
-Version: 1.16
+Version: 1.17
 
 Author URI: http://www.antithesis.gr
 
@@ -20,52 +20,60 @@ Author URI: http://www.antithesis.gr
 
 defined( 'ABSPATH' ) OR exit;
 
-define('LONGER_PERMALINKS_PLUGIN_VERSION', "115");
-
+define('LONGER_PERMALINKS_PLUGIN_VERSION', "117");
 define('REDEF_FILE', WP_PLUGIN_DIR."/longer-permalinks/sanitize_override.inc");
+
 register_activation_hook( __FILE__, 'longer_permalinks_plugin_install' );
 
-$last_wp_ver = get_option('longer-permalinks-wpver');
+$last_plugin_ver = get_site_option('longer-permalinks-pluginver');
+$last_wp_ver = get_site_option('longer-permalinks-wpver');
 $current_wp_ver = get_bloginfo('version');
+$last_db_ver = get_site_option('longer-permalinks-dbver');
+$current_db_ver = get_site_option('db_version');
+$redefined = file_exists(REDEF_FILE);
 
-$last_plugin_ver = get_option('longer-permalinks-pluginver');
+// First install or updating plugin from 1.14-
+if ( empty($last_plugin_ver) || ($last_plugin_ver == '') ) {
+	//backup all post-names so far
+	longer_permalinks_backup_existing_postnames();
+	update_site_option( 'longer-permalinks-wpver', $current_wp_ver );
+	update_site_option( 'longer-permalinks-dbver', $current_db_ver );
+}
+// Plugin update
+if ($last_plugin_ver != LONGER_PERMALINKS_PLUGIN_VERSION) { //nothing special yet...
+	update_option( 'longer-permalinks-pluginver', LONGER_PERMALINKS_PLUGIN_VERSION );
+}
 
 
-$redefined = 0;
-if ( !file_exists (REDEF_FILE) || ($last_wp_ver != $current_wp_ver) ) {
-	longer_permalinks_alter_post_name_length();
+if ( ($last_wp_ver != $current_wp_ver) || ($last_db_ver != $current_db_ver) ) {
+	longer_permalinks_alter_post_name_length();	
+
+    if ($last_wp_ver != $current_wp_ver)
+	        update_site_option( 'longer-permalinks-wpver', $current_wp_ver );
+    if ($last_db_ver != $current_db_ver)
+	        update_site_option( 'longer-permalinks-dbver', $current_db_ver );
+}
+
+
+if ( !$redefined || ($last_wp_ver != $current_wp_ver) ) {
 	$redefined = redefine_sanitize_title_with_dashes();
-} else {
-	$redefined = 1;
 }
 if ($redefined) {
 	include(REDEF_FILE);
-
 	// replace the standard filter
 	remove_filter( 'sanitize_title', 'sanitize_title_with_dashes' );
 	add_filter( 'sanitize_title', 'longer_permalinks_sanitize_title_with_dashes', 10, 3 );
 }
 
-//updating plugin from 1.14-
-if ( empty($last_plugin_ver) || ($last_plugin_ver == '') ) {
-	//backup all post-names so far
-	longer_permalinks_backup_existing_postnames();
+
+// restore longer permalinks in case of wp upgrade
+// applying default wp db schema on upgrade will truncate post_name
+//  we cannot filter anything on upgrade process, so we revert our longer slugs
+if ( get_site_option('longer-permalinks-revert-needed') == 1 ) {
+		longer_permalinks_revert_longer_titles();
+		update_option( 'longer-permalinks-revert-needed', 0 );
 }
 
-if ($last_plugin_ver != LONGER_PERMALINKS_PLUGIN_VERSION) {
-	//nothine extra yet...
-	update_option( 'longer-permalinks-pluginver', LONGER_PERMALINKS_PLUGIN_VERSION );
-}
-
-if  ($last_wp_ver != $current_wp_ver) {
-	// restore longer permalinks in case of wp upgrade
-	// applying default wp db schema on upgrade will truncate post_name
-	// we cannot filter anything on upgrade process, so we revert our longer slugs
-	longer_permalinks_revert_longer_titles();
-
-        if ($last_wp_ver !=  $current_wp_ver)
-	        update_option( 'longer-permalinks-wpver', $current_wp_ver );
-}
 
 //keep our longer slugs backups on post updates
 add_action('save_post', 'longer_permalinks_backup_post_name_on_update', 10,2);
@@ -167,7 +175,6 @@ function longer_permalinks_notice__error_unexpected() {
     echo '</p></div>';
 }
 
-
 function longer_permalinks_plugin_install() {
 	global $wpdb;
 
@@ -182,7 +189,9 @@ function longer_permalinks_plugin_install() {
 function longer_permalinks_alter_post_name_length() {
 	global $wpdb;
 	
-        $sql = "CREATE TABLE {$wpdb->prefix}posts (post_name varchar(3000) NOT NULL default '');";
+        $sql = "CREATE TABLE {$wpdb->prefix}posts (
+          post_name varchar(3000) DEFAULT '' NOT NULL
+        );";
 
 	require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 	dbDelta( $sql );
@@ -190,5 +199,8 @@ function longer_permalinks_alter_post_name_length() {
         if($wpdb->last_error !== '') {
                 trigger_error( _e('Plugin requires at least MySQL 5.0.3 - Plugin will fail'), E_USER_ERROR );
         }
+
+    update_option( 'longer-permalinks-revert-needed', 1 ); // to update on next call
 }
+
 

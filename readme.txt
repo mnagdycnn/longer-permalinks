@@ -3,8 +3,8 @@ Contributors: antithesisgr
 Author link: http://www.antithesis.gr
 Tags: permalinks, long, slugs, slugs length, long title, post_name size, titles, non-latin, url, permalinks limitation, long url, long slug
 Requires at least: 4.0
-Tested up to: 5.0.1
-Stable tag: 1.16
+Tested up to: 5.3.2
+Stable tag: 1.17
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -32,6 +32,12 @@ This plugin is really useful especially in non-latin slugs because of the requir
 3. That's it!
 
 == Changelog ==
+
+= 1.17 =
+* Fix for WordPress upgrade process that needs a separate step for the database upgrade ("Database Update Required" cases)
+* Proper handling on WordPress upgrade cases to avoid unnecessary database locks
+* Source code refactoring
+* Uninstall actions update
 
 = 1.16 =
 * Minor regex adjustment
