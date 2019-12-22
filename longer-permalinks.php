@@ -78,13 +78,7 @@ if ( get_site_option('longer-permalinks-revert-needed') == 1 ) {
 //keep our longer slugs backups on post updates
 add_action('save_post', 'longer_permalinks_backup_post_name_on_update', 10,2);
 add_action('wp_insert_post', 'longer_permalinks_backup_post_name_on_update', 10,2);
-//add_action('post_updated', 'longer_permalinks_backup_post_name_on_update', 10, 3); 
-//add_filter('wp_unique_post_slug','longer_permalinks_backup_the_slug',10,6);
 
-/*function longer_permalinks_backup_the_slug($slug, $post_ID, $post_status, $post_type, $post_parent, $original_slug) {
-	update_post_meta($post_ID, 'longer-permalinks-post-name-longer', $slug);
-	return $slug;
-}*/
 
 function longer_permalinks_backup_post_name_on_update($post_ID, $post_after) {
         update_post_meta($post_ID, 'longer-permalinks-post-name-longer', $post_after->post_name);
