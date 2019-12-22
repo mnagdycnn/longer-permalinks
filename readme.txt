@@ -35,7 +35,7 @@ This plugin is really useful especially in non-latin slugs because of the requir
 
 = 1.17 =
 * Fix for WordPress upgrade process that needs a separate step for the database upgrade ("Database Update Required" cases)
-* Proper handling on WordPress upgrade cases to avoid unnecessary database locks
+* Proper handling on WordPress upgrades to avoid unnecessary database locks
 * Source code refactoring
 * Uninstall actions update
 * Tests update up to 5.3.2
