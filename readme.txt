@@ -38,6 +38,7 @@ This plugin is really useful especially in non-latin slugs because of the requir
 * Proper handling on WordPress upgrade cases to avoid unnecessary database locks
 * Source code refactoring
 * Uninstall actions update
+* Tests update up to 5.3.2
 
 = 1.16 =
 * Minor regex adjustment
