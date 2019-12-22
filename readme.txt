@@ -33,12 +33,14 @@ This plugin is really useful especially in non-latin slugs because of the requir
 
 == Changelog ==
 
+= 1.18 =
+* Tested on 5.3.2
+
 = 1.17 =
 * Fix for WordPress upgrade process that needs a separate step for the database upgrade - "Database Update Required" cases (credits: @margroup for investigating the problem and testing the solution)
 * Proper handling on WordPress upgrades to avoid unnecessary database locks
 * Source code refactoring
 * Uninstall actions update
-* Tested up to 5.3.2
 
 = 1.16 =
 * Minor regex adjustment
