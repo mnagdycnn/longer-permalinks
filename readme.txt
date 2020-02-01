@@ -4,7 +4,7 @@ Author link: http://www.antithesis.gr
 Tags: permalinks, long, slugs, slugs length, long title, post_name size, titles, non-latin, url, permalinks limitation, long url, long slug
 Requires at least: 4.0
 Tested up to: 5.3.2
-Stable tag: 1.18
+Stable tag: 1.19
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -32,6 +32,11 @@ This plugin is really useful especially in non-latin slugs because of the requir
 3. That's it!
 
 == Changelog ==
+
+= 1.19 =
+* Important changes in handle load on database upgrades and first installation.
+We now use explicit locks to handle concurrent requests on those situations gracefully.
+(not tested on active database clusters like Galera Cluster or any STATEMENT based replication setups)
 
 = 1.18 =
 * Tested on 5.3.2
