@@ -34,8 +34,8 @@ This plugin is really useful especially in non-latin slugs because of the requir
 == Changelog ==
 
 = 1.19 =
-* Important changes in handle load on database upgrades and first installation.
-We now use explicit locks to handle concurrent requests on those situations gracefully.
+* Important changes to handle extra load on database upgrades and first installation.
+We now use explicit db locks to handle concurrent requests on those situations gracefully.
 (not tested on active database clusters like Galera Cluster or any STATEMENT based replication setups)
 
 = 1.18 =
