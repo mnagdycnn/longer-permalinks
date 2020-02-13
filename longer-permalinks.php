@@ -12,7 +12,7 @@ Useful for permalinks using non latin characters in URLs. Long permalinks will n
 
 Author: Giannis Economou
 
-Version: 1.20
+Version: 1.21
 
 Author URI: http://www.antithesis.gr
 
@@ -20,7 +20,7 @@ Author URI: http://www.antithesis.gr
 
 defined( 'ABSPATH' ) OR exit;
 
-define('LONGER_PERMALINKS_PLUGIN_VERSION', "120");
+define('LONGER_PERMALINKS_PLUGIN_VERSION', "121");
 define('REDEF_FILE', WP_PLUGIN_DIR."/longer-permalinks/sanitize_override.inc");
 
 register_activation_hook( __FILE__, 'longer_permalinks_plugin_install' );
@@ -34,10 +34,10 @@ $current_db_ver = get_site_option('db_version');
 
 $redefined = file_exists(REDEF_FILE);
 
-// First install or updating plugin from 1.14-
-if ( empty($last_plugin_ver) || ($last_plugin_ver == '') ) {
+// First install or updating plugin from 1.14- or updating version 1.20
+if ( empty($last_plugin_ver) || ($last_plugin_ver == '') || $last_plugin_ver == '120' ) {
 	//mark the need to backup all post-names so far
-	update_site_option('longer-permalinks-backup-needed',1);
+	update_site_option( 'longer-permalinks-backup-needed', 1 );
 	update_site_option( 'longer-permalinks-wpver', $current_wp_ver );
 	update_site_option( 'longer-permalinks-dbver', $current_db_ver );
 }
@@ -49,7 +49,7 @@ if ( get_site_option('longer-permalinks-backup-needed') == 1 ) {
 
 // Plugin update
 if ($last_plugin_ver != LONGER_PERMALINKS_PLUGIN_VERSION) { //nothing special yet...
-	update_option( 'longer-permalinks-pluginver', LONGER_PERMALINKS_PLUGIN_VERSION );
+	update_site_option( 'longer-permalinks-pluginver', LONGER_PERMALINKS_PLUGIN_VERSION );
 }
 
 
@@ -76,8 +76,9 @@ if ($redefined) {
 
 // restore longer permalinks in case of wp upgrade
 // applying default wp db schema on upgrade will truncate post_name
-//  we cannot filter anything on upgrade process, so we revert our longer slugs
+// we cannot filter anything on upgrade process, so we revert our longer slugs
 if ( (!get_site_option('longer-permalinks-backup-needed')) && (get_site_option('longer-permalinks-revert-needed') == 1) ) {
+		#error_log("Longer Permalinks - proceed to revert.");
 		longer_permalinks_revert_longer_titles();
 }
 
@@ -101,32 +102,37 @@ function longer_permalinks_revert_longer_titles() {
 
 	//Our UPDATE is safe even if postname backup failed in the beginning and later succeeded (UPDATE uses the first match)
 	$sql = "UPDATE {$wpdb->prefix}posts p JOIN {$wpdb->prefix}postmeta m ON m.post_id = p.ID SET p.post_name = m.meta_value WHERE m.meta_key = 'longer-permalinks-post-name-longer';";
-	if ($wpdb->get_var($get_lock_sql) ) { //to avoid multiple runs
-		if ($wpdb->query($sql)) {
+	if ($wpdb->get_var($get_lock_sql) ) { //to avoid multiple runs (we would prefer a transaction but maybe InnoDB is not in use)
+		#error_log("Longer Permalinks - got a lock will exec the revert.");
+		if ($wpdb->query($sql) !== false) {
 			update_site_option( 'longer-permalinks-revert-needed', 0 ); // to update on next call
 		}
+		#error_log("Longer Permalinks - releasing the lock (revert).");
 		$wpdb->query($release_lock_sql);
 	} else {
-		error_log("Longer Permalinks - could not acquire LOCK for longer permalinks restore.");
+		#error_log("Longer Permalinks - could not acquire LOCK for longer permalinks restore.");
 	}
-
 }
 
 function longer_permalinks_backup_existing_postnames() {
-        global $wpdb;
+	global $wpdb;
 
-		//using direct sql for speed, avoid delays on sites with a lot of posts
-		$get_lock_sql="SELECT GET_LOCK('" . DB_NAME . '_' . __FUNCTION__ . "',0)";
-		$release_lock_sql="SELECT RELEASE_LOCK('" . DB_NAME . '_' . __FUNCTION__ . "')";
-		$sql="INSERT INTO {$wpdb->prefix}postmeta (post_id, meta_key, meta_value) SELECT ID, 'longer-permalinks-post-name-longer', {$wpdb->prefix}posts.post_name FROM {$wpdb->prefix}posts";
-		if ($wpdb->get_var($get_lock_sql) ) { //we need to run this only once
-			if ($wpdb->query($sql)) {
-				update_site_option('longer-permalinks-backup-needed', 0 );
-			}
-			$wpdb->query($release_lock_sql);
-		} else {
-			error_log("Longer Permalinks - could not acquire LOCK for longer permalinks backup.");
+	//using direct sql for speed, avoid delays on sites with a lot of posts
+	//we would prefer a transaction but maybe InnoDB is not in use
+	$get_lock_sql="SELECT GET_LOCK('" . DB_NAME . '_' . __FUNCTION__ . "',0)";
+	$release_lock_sql="SELECT RELEASE_LOCK('" . DB_NAME . '_' . __FUNCTION__ . "')";
+	$sql_delete="DELETE FROM {$wpdb->prefix}postmeta WHERE {$wpdb->prefix}postmeta.meta_key = 'longer-permalinks-post-name-longer'";
+	$sql_insert="INSERT INTO {$wpdb->prefix}postmeta (post_id, meta_key, meta_value) SELECT ID, 'longer-permalinks-post-name-longer', {$wpdb->prefix}posts.post_name FROM {$wpdb->prefix}posts";
+	if ($wpdb->get_var($get_lock_sql) ) { //we need to run this only once (we would prefer a transaction but maybe InnoDB is not in use)
+		#error_log("Longer Permalinks - got a lock will exec the backup.");
+		if ( $wpdb->query($sql_delete) !== false && $wpdb->query($sql_insert) !== false ) {
+			update_site_option('longer-permalinks-backup-needed', '0' );
 		}
+		#error_log("Longer Permalinks - releasing the lock (backup).");
+		$wpdb->query($release_lock_sql);
+	} else {
+		#error_log("Longer Permalinks - could not acquire LOCK for longer permalinks backup.");
+	}
 }
 
 function redefine_sanitize_title_with_dashes() {
@@ -202,6 +208,7 @@ function longer_permalinks_plugin_install() {
         	return;
 
 	longer_permalinks_alter_post_name_length();
+	update_site_option( 'longer-permalinks-backup-needed', 1 );
 
 }
 
