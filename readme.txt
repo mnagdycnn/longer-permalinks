@@ -3,8 +3,8 @@ Contributors: antithesisgr
 Author link: http://www.antithesis.gr
 Tags: permalinks, long, slugs, slugs length, long title, post_name size, titles, non-latin, url, permalinks limitation, long url, long slug
 Requires at least: 4.0
-Tested up to: 5.3.2
-Stable tag: 1.21
+Tested up to: 5.4
+Stable tag: 1.22
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -32,6 +32,10 @@ This plugin is really useful especially in non-latin slugs because of the requir
 3. That's it!
 
 == Changelog ==
+
+= 1.22 = 
+* Bugfix: lock name should not exceed 64 chars for some MySQL flavors/versions
+* Tested on WP 5.4
 
 = 1.21 =
 * Important bugfixes.

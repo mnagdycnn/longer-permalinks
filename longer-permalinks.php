@@ -12,7 +12,7 @@ Useful for permalinks using non latin characters in URLs. Long permalinks will n
 
 Author: Giannis Economou
 
-Version: 1.21
+Version: 1.22
 
 Author URI: http://www.antithesis.gr
 
@@ -20,7 +20,7 @@ Author URI: http://www.antithesis.gr
 
 defined( 'ABSPATH' ) OR exit;
 
-define('LONGER_PERMALINKS_PLUGIN_VERSION', "121");
+define('LONGER_PERMALINKS_PLUGIN_VERSION', "122");
 define('REDEF_FILE', WP_PLUGIN_DIR."/longer-permalinks/sanitize_override.inc");
 
 register_activation_hook( __FILE__, 'longer_permalinks_plugin_install' );
@@ -97,8 +97,9 @@ function longer_permalinks_revert_longer_titles() {
     global $wpdb;
 
 	//using direct sql for speed, avoid long delays on sites with a lot of posts
-	$get_lock_sql="SELECT GET_LOCK('" . DB_NAME . '_' . __FUNCTION__ . "',0)";
-	$release_lock_sql="SELECT RELEASE_LOCK('" . DB_NAME . '_' . __FUNCTION__ . "')";
+	$lock_name = substr(DB_NAME . '_' . __FUNCTION__,0,60);
+	$get_lock_sql = "SELECT GET_LOCK('$lock_name',0)";
+	$release_lock_sql = "SELECT RELEASE_LOCK('$lock_name')";
 
 	//Our UPDATE is safe even if postname backup failed in the beginning and later succeeded (UPDATE uses the first match)
 	$sql = "UPDATE {$wpdb->prefix}posts p JOIN {$wpdb->prefix}postmeta m ON m.post_id = p.ID SET p.post_name = m.meta_value WHERE m.meta_key = 'longer-permalinks-post-name-longer';";
@@ -119,8 +120,9 @@ function longer_permalinks_backup_existing_postnames() {
 
 	//using direct sql for speed, avoid delays on sites with a lot of posts
 	//we would prefer a transaction but maybe InnoDB is not in use
-	$get_lock_sql="SELECT GET_LOCK('" . DB_NAME . '_' . __FUNCTION__ . "',0)";
-	$release_lock_sql="SELECT RELEASE_LOCK('" . DB_NAME . '_' . __FUNCTION__ . "')";
+        $lock_name = substr(DB_NAME . '_' . __FUNCTION__,0,60);
+	$get_lock_sql="SELECT GET_LOCK('$lock_name',0)";
+	$release_lock_sql="SELECT RELEASE_LOCK('$lock_name')";
 	$sql_delete="DELETE FROM {$wpdb->prefix}postmeta WHERE {$wpdb->prefix}postmeta.meta_key = 'longer-permalinks-post-name-longer'";
 	$sql_insert="INSERT INTO {$wpdb->prefix}postmeta (post_id, meta_key, meta_value) SELECT ID, 'longer-permalinks-post-name-longer', {$wpdb->prefix}posts.post_name FROM {$wpdb->prefix}posts";
 	if ($wpdb->get_var($get_lock_sql) ) { //we need to run this only once (we would prefer a transaction but maybe InnoDB is not in use)
