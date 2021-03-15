@@ -12,7 +12,7 @@ Useful for permalinks using non latin characters in URLs. Long permalinks will n
 
 Author: Giannis Economou
 
-Version: 1.24
+Version: 1.25
 
 Author URI: http://www.antithesis.gr
 
@@ -20,7 +20,7 @@ Author URI: http://www.antithesis.gr
 
 defined( 'ABSPATH' ) OR exit;
 
-define('LONGER_PERMALINKS_PLUGIN_VERSION', "124");
+define('LONGER_PERMALINKS_PLUGIN_VERSION', "125");
 define('REDEF_FILE', WP_PLUGIN_DIR."/longer-permalinks/sanitize_override.inc");
 
 register_activation_hook( __FILE__, 'longer_permalinks_plugin_install' );
@@ -42,14 +42,15 @@ if ( empty($last_plugin_ver) || ($last_plugin_ver == '') || $last_plugin_ver == 
 	update_option( 'longer-permalinks-dbver', $current_db_ver );
 }
 
-//backup all post-names if needed
-if ( get_option('longer-permalinks-backup-needed') == 1 ) {
-	longer_permalinks_backup_existing_postnames();
+// Plugin update
+if ($last_plugin_ver != LONGER_PERMALINKS_PLUGIN_VERSION) {
+        update_option( 'longer-permalinks-backup-needed', 1 );
+	update_option( 'longer-permalinks-pluginver', LONGER_PERMALINKS_PLUGIN_VERSION );
 }
 
-// Plugin update
-if ($last_plugin_ver != LONGER_PERMALINKS_PLUGIN_VERSION) { //nothing special yet...
-	update_option( 'longer-permalinks-pluginver', LONGER_PERMALINKS_PLUGIN_VERSION );
+//backup all post-names if needed
+if ( get_option('longer-permalinks-backup-needed') == 1 ) {
+        longer_permalinks_backup_existing_postnames();
 }
 
 
@@ -89,6 +90,17 @@ add_action('wp_insert_post', 'longer_permalinks_backup_post_name_on_update', 10,
 
 
 function longer_permalinks_backup_post_name_on_update($post_ID, $post_after) {
+	// do not proceed on auto-draft, auto-save and post revisions
+        if (wp_is_post_revision($post_ID) !== false) {
+                return;
+        }
+	if (isset($post_after->post_status) && $post_after->post_status == 'auto-draft') {
+		return;
+	}
+  	if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
+		return;
+	}
+
         update_post_meta($post_ID, 'longer-permalinks-post-name-longer', $post_after->post_name);
 }
 
@@ -124,7 +136,7 @@ function longer_permalinks_backup_existing_postnames() {
 	$get_lock_sql="SELECT GET_LOCK('$lock_name',0)";
 	$release_lock_sql="SELECT RELEASE_LOCK('$lock_name')";
 	$sql_delete="DELETE FROM {$wpdb->prefix}postmeta WHERE {$wpdb->prefix}postmeta.meta_key = 'longer-permalinks-post-name-longer'";
-	$sql_insert="INSERT INTO {$wpdb->prefix}postmeta (post_id, meta_key, meta_value) SELECT ID, 'longer-permalinks-post-name-longer', {$wpdb->prefix}posts.post_name FROM {$wpdb->prefix}posts";
+	$sql_insert="INSERT INTO {$wpdb->prefix}postmeta (post_id, meta_key, meta_value) SELECT ID, 'longer-permalinks-post-name-longer', {$wpdb->prefix}posts.post_name FROM {$wpdb->prefix}posts WHERE post_type != 'revision' AND post_status != 'auto-draft'";
 	if ($wpdb->get_var($get_lock_sql) ) { //we need to run this only once (we would prefer a transaction but maybe InnoDB is not in use)
 		#error_log("Longer Permalinks - got a lock will exec the backup.");
 		if ( $wpdb->query($sql_delete) !== false && $wpdb->query($sql_insert) !== false ) {
