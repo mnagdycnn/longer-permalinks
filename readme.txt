@@ -33,6 +33,9 @@ This plugin is really useful especially in non-latin slugs because of the requir
 
 == Changelog ==
 
+= 1.25 = 
+* Bugfix: correct handling of autosaves and revisions on WP core updates
+
 = 1.24 =
 * Bug fixes for WordPress Multi-site compatibility
 
