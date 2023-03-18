@@ -13,16 +13,16 @@ Respects future relevant core updates.
 
 == Description ==
 
-This plugin allows you to use longer URLs (permalinks), by allowing much more characters in your titles and slug. Done in a way that is future compatible as much as possible with future updates of WordPress core. 
-There is a 200 characters limitation on WordPress core nowadays. This limit is raised to 3000. 
-Plugin is always extending only your current WordPress core code, even after core updates.
-Your long permalinks will now work. 
+This plugin allows you to use longer URLs (permalinks), by allowing much more characters in your titles and slug. The important is that this is done in a way that is future compatible future updates of WordPress core. 
+There is a 200 characters limitation on WordPress core nowadays and this limit is raised to 3000 with the plugin.
+Plugin is always extending the current WordPress core code - your long URLs are working even after WordPress core updates.
 This plugin is really useful especially in non-latin slugs because of the required url escaping that increases the length of your permalinks a lot.
 
 
 = Features =
-* Uppon activation the available slug length (post title) will become 3000, allowing long permalinks.
-* Required functionality is automatically applied in your current core code (even after future WordPress updates).
+* Upon activation the available slug length (post title) will become 3000, allowing long permalinks.
+* Required functionality is automatically applied without changing WordPress core files.
+* Even after core updates, plugin will automatically apply required changes and keep your long URLs working.
 * Plugin requires at least MySQL 5.0.3
 
 == Installation ==
@@ -32,6 +32,9 @@ This plugin is really useful especially in non-latin slugs because of the requir
 3. That's it!
 
 == Changelog ==
+
+= 1.27 =
+* Refactoring and minor improvements
 
 = 1.26 = 
 * Refactoring code
