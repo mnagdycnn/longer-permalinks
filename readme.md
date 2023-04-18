@@ -1,11 +1,19 @@
 **Longer Permalinks**
+
 Contributors: antithesisgr, Mohamed Nagdy
+
 Author link: http://www.antithesis.gr
+
 Tags: permalinks, long, slugs, slugs length, long title, post_name size, titles, non-latin, url, permalinks limitation, long url, long slug
+
 Requires at least: 4.0
+
 Tested up to: 6.1
+
 Stable tag: 1.28
+
 License: GPLv2 or later
+
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 Allow long permalinks in your WordPress. Useful especially for using non-latin characters in permalinks. 
