@@ -1,5 +1,5 @@
-=== Longer Permalinks ===
-Contributors: antithesisgr
+### Longer Permalinks
+Contributors: antithesisgr, Mohamed Nagdy
 Author link: http://www.antithesis.gr
 Tags: permalinks, long, slugs, slugs length, long title, post_name size, titles, non-latin, url, permalinks limitation, long url, long slug
 Requires at least: 4.0

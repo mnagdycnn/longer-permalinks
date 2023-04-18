@@ -1,0 +1,28 @@
+{
+    "name": "mnagdycnn/longer-permalinks",
+    "description": "A plugin that extends the slug characters limit, espacially for non-English characters in the 'post_name' field from 200 to 3000 characters",
+    "type": "wordpress-plugin",
+    "license": "GPL-2.0-or-later",
+    "authors": [
+      {
+        "name": "antithesisgr"
+      }
+    ],
+    "require": {
+      "php": ">=7.3"
+    },
+    "autoload": {
+      "psr-4": {
+        "LongerPermalinks\\": "./**"
+      }
+    },
+    "scripts": {
+      "lint": "phpcs .",
+      "lint-fix": "phpcbf ."
+    },
+    "config": {
+      "allow-plugins": {
+        "dealerdirect/phpcodesniffer-composer-installer": true
+      }
+    }
+  }
