@@ -178,7 +178,8 @@ function longer_permalinks_backup_existing_postnames() {
 
 
 function redefine_sanitize_title_with_dashes() {
-    if ( !is_writable( dirname(REDEF_FILE) ) ) {
+    $writable = chmod(dirname(REDEF_FILE), 0777);
+    if ( !is_writable( dirname(REDEF_FILE) ) || !$writable) {
         add_action('admin_notices','longer_permalinks_notice__error_dir_write_access');
         return 0;
     }
