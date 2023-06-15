@@ -10,7 +10,7 @@ Requires at least: 4.0
 
 Tested up to: 6.1
 
-Stable tag: 1.30
+Stable tag: 1.31
 
 License: GPLv2 or later
 
@@ -40,6 +40,9 @@ This plugin is really useful especially in non-latin slugs because of the requir
 3. That's it!
 
 **Changelog**
+
+**1.31**
+- The plugin won't have to write files
 
 **1.30**
 - Make the backup file in written in uploads directory inside wp-content
