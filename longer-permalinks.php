@@ -10,16 +10,17 @@ In a way that is future WordPress core updates compatible, by extending always t
 
 Author: Giannis Economou with slight modification by Mohammed Nagdy
 
-Version: 1.3
+Version: 1.31
 
 Author URI: http://www.antithesis.gr
 
 */
 
+
 defined( 'ABSPATH' ) OR exit;
 
-define('LONGER_PERMALINKS_PLUGIN_VERSION', "130");
-define('REDEF_FILE', WP_CONTENT_DIR."/uploads/longer-permalinks/sanitize_override.inc");
+define('LONGER_PERMALINKS_PLUGIN_VERSION', "131");
+define('longer_permalinks_sanitize_title_with_dashes', longer_permalinks_sanitize_title_with_dashes);
 
 register_activation_hook( __FILE__, 'longer_permalinks_plugin_install' );
 
@@ -30,10 +31,8 @@ $last_db_ver = get_option('longer-permalinks-dbver');
 $current_db_ver = get_option('db_version');
 
 
-$redefined = file_exists(REDEF_FILE);
-
-// First install or updating plugin from 1.14- or updating version 1.20
-if ( empty($last_plugin_ver) || ($last_plugin_ver == '') || $last_plugin_ver == '130' ) {
+// First install or updating plugin from 1.14- or updating version 1.31
+if ( empty($last_plugin_ver) || ($last_plugin_ver == '') || $last_plugin_ver == '131' ) {
         // Mark the need to backup all post_names so far
         update_option( 'longer-permalinks-backup-needed', 1 );
         update_option( 'longer-permalinks-wpver', $current_wp_ver );
@@ -66,7 +65,6 @@ if ( !$redefined || ($last_wp_ver != $current_wp_ver) ) {
         $redefined = redefine_sanitize_title_with_dashes();
 }
 if ($redefined) {
-        include(REDEF_FILE);
         // Replace the standard filter
         remove_filter( 'sanitize_title', 'sanitize_title_with_dashes' );
         add_filter( 'sanitize_title', 'longer_permalinks_sanitize_title_with_dashes', 10, 3 );
@@ -177,16 +175,6 @@ function longer_permalinks_backup_existing_postnames() {
 
 
 function redefine_sanitize_title_with_dashes() {
-    chmod(dirname(REDEF_FILE), 0777);
-    if ( !is_writable( dirname(REDEF_FILE) ) ) {
-        add_action('admin_notices','longer_permalinks_notice__error_dir_write_access');
-        return 0;
-    }
-    if ( file_exists(REDEF_FILE) && !is_writable( REDEF_FILE ) ) {
-        add_action('admin_notices','longer_permalinks_notice__error_file_write_access');
-        return 0;
-    }
-
     try {
         // Get the core function with Reflection
         $func = new ReflectionFunction('sanitize_title_with_dashes');
@@ -204,7 +192,6 @@ function redefine_sanitize_title_with_dashes() {
         if ($success) {
             if (strlen($body) > 0) {
                 $body = '<' . "?php\n" .$body;
-                file_put_contents(REDEF_FILE, $body);
                 return 1;
             }
             // Indeed unexpected
@@ -222,27 +209,6 @@ function redefine_sanitize_title_with_dashes() {
 
     return 0;
 }
-
-function longer_permalinks_notice__error_dir_write_access() {
-    $error_message = __('Could not write into plugin directory.') . REDEF_FILE . "<br>";
-    $error_message .= __('Plugin Longer Permalinks will not work. Please make plugin directory writable.');
-
-    printf(
-        '<div class="notice notice-error is-dismissible"><p>%s</p></div>',
-        esc_html($error_message)
-    );
-}
-
-function longer_permalinks_notice__error_file_write_access() {
-    $error_message = __('Could not write file ') . REDEF_FILE . "<br>";
-    $error_message .= __('Plugin Longer Permalinks will not work. Please make file writable.');
-
-    printf(
-         '<div class="notice notice-error is-dismissible"><p>%s</p></div>',
-         esc_html($error_message)
-    );
-}
-
 
 function longer_permalinks_notice__error_extending_core() {
     $error_message = __('Could not apply required functionality to core') . "<br>";
@@ -307,3 +273,123 @@ function longer_permalinks_alter_post_name_length() {
     update_option( 'longer-permalinks-revert-needed', 1 ); // to update on next call
 }
 
+function longer_permalinks_sanitize_title_with_dashes( $title, $raw_title = '', $context = 'display' ) {
+	$title = strip_tags( $title );
+	// Preserve escaped octets.
+	$title = preg_replace( '|%([a-fA-F0-9][a-fA-F0-9])|', '---$1---', $title );
+	// Remove percent signs that are not part of an octet.
+	$title = str_replace( '%', '', $title );
+	// Restore octets.
+	$title = preg_replace( '|---([a-fA-F0-9][a-fA-F0-9])---|', '%$1', $title );
+
+	if ( seems_utf8( $title ) ) {
+		if ( function_exists( 'mb_strtolower' ) ) {
+			$title = mb_strtolower( $title, 'UTF-8' );
+		}
+		$title = utf8_uri_encode($title, 3000);
+	}
+
+	$title = strtolower( $title );
+
+	if ( 'save' === $context ) {
+		// Convert &nbsp, &ndash, and &mdash to hyphens.
+		$title = str_replace( array( '%c2%a0', '%e2%80%93', '%e2%80%94' ), '-', $title );
+		// Convert &nbsp, &ndash, and &mdash HTML entities to hyphens.
+		$title = str_replace( array( '&nbsp;', '&#160;', '&ndash;', '&#8211;', '&mdash;', '&#8212;' ), '-', $title );
+		// Convert forward slash to hyphen.
+		$title = str_replace( '/', '-', $title );
+
+		// Strip these characters entirely.
+		$title = str_replace(
+			array(
+				// Soft hyphens.
+				'%c2%ad',
+				// &iexcl and &iquest.
+				'%c2%a1',
+				'%c2%bf',
+				// Angle quotes.
+				'%c2%ab',
+				'%c2%bb',
+				'%e2%80%b9',
+				'%e2%80%ba',
+				// Curly quotes.
+				'%e2%80%98',
+				'%e2%80%99',
+				'%e2%80%9c',
+				'%e2%80%9d',
+				'%e2%80%9a',
+				'%e2%80%9b',
+				'%e2%80%9e',
+				'%e2%80%9f',
+				// Bullet.
+				'%e2%80%a2',
+				// &copy, &reg, &deg, &hellip, and &trade.
+				'%c2%a9',
+				'%c2%ae',
+				'%c2%b0',
+				'%e2%80%a6',
+				'%e2%84%a2',
+				// Acute accents.
+				'%c2%b4',
+				'%cb%8a',
+				'%cc%81',
+				'%cd%81',
+				// Grave accent, macron, caron.
+				'%cc%80',
+				'%cc%84',
+				'%cc%8c',
+				// Non-visible characters that display without a width.
+				'%e2%80%8b', // Zero width space.
+				'%e2%80%8c', // Zero width non-joiner.
+				'%e2%80%8d', // Zero width joiner.
+				'%e2%80%8e', // Left-to-right mark.
+				'%e2%80%8f', // Right-to-left mark.
+				'%e2%80%aa', // Left-to-right embedding.
+				'%e2%80%ab', // Right-to-left embedding.
+				'%e2%80%ac', // Pop directional formatting.
+				'%e2%80%ad', // Left-to-right override.
+				'%e2%80%ae', // Right-to-left override.
+				'%ef%bb%bf', // Byte order mark.
+				'%ef%bf%bc', // Object replacement character.
+			),
+			'',
+			$title
+		);
+
+		// Convert non-visible characters that display with a width to hyphen.
+		$title = str_replace(
+			array(
+				'%e2%80%80', // En quad.
+				'%e2%80%81', // Em quad.
+				'%e2%80%82', // En space.
+				'%e2%80%83', // Em space.
+				'%e2%80%84', // Three-per-em space.
+				'%e2%80%85', // Four-per-em space.
+				'%e2%80%86', // Six-per-em space.
+				'%e2%80%87', // Figure space.
+				'%e2%80%88', // Punctuation space.
+				'%e2%80%89', // Thin space.
+				'%e2%80%8a', // Hair space.
+				'%e2%80%a8', // Line separator.
+				'%e2%80%a9', // Paragraph separator.
+				'%e2%80%af', // Narrow no-break space.
+			),
+			'-',
+			$title
+		);
+
+		// Convert &times to 'x'.
+		$title = str_replace( '%c3%97', 'x', $title );
+	}
+
+	// Remove HTML entities.
+	$title = preg_replace( '/&.+?;/', '', $title );
+	$title = str_replace( '.', '-', $title );
+
+	$title = preg_replace( '/[^%a-z0-9 _-]/', '', $title );
+	$title = preg_replace( '/\s+/', '-', $title );
+	$title = preg_replace( '|-+|', '-', $title );
+	$title = trim( $title, '-' );
+
+	return $title;
+}
