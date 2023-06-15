@@ -20,7 +20,6 @@ Author URI: http://www.antithesis.gr
 defined( 'ABSPATH' ) OR exit;
 
 define('LONGER_PERMALINKS_PLUGIN_VERSION', "131");
-define('longer_permalinks_sanitize_title_with_dashes', longer_permalinks_sanitize_title_with_dashes);
 
 register_activation_hook( __FILE__, 'longer_permalinks_plugin_install' );
 
