@@ -278,6 +278,8 @@ function longer_permalinks_sanitize_title_with_dashes( $title, $raw_title = '', 
 	$title = preg_replace( '|%([a-fA-F0-9][a-fA-F0-9])|', '---$1---', $title );
 	// Remove percent signs that are not part of an octet.
 	$title = str_replace( '%', '', $title );
+        // Remove question and exclamation marks
+        $title = preg_replace( array('/\?/', '/\؟/', '/\!/'), '', $title );
 	// Restore octets.
 	$title = preg_replace( '|---([a-fA-F0-9][a-fA-F0-9])---|', '%$1', $title );
 
