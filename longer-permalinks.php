@@ -10,7 +10,7 @@ In a way that is future WordPress core updates compatible, by extending always t
 
 Author: Giannis Economou with slight modification by Mohammed Nagdy
 
-Version: 1.31
+Version: 1.32
 
 Author URI: http://www.antithesis.gr
 
@@ -19,7 +19,7 @@ Author URI: http://www.antithesis.gr
 
 defined( 'ABSPATH' ) OR exit;
 
-define('LONGER_PERMALINKS_PLUGIN_VERSION', "131");
+define('LONGER_PERMALINKS_PLUGIN_VERSION', "132");
 
 register_activation_hook( __FILE__, 'longer_permalinks_plugin_install' );
 
@@ -31,7 +31,7 @@ $current_db_ver = get_option('db_version');
 
 
 // First install or updating plugin from 1.14- or updating version 1.31
-if ( empty($last_plugin_ver) || ($last_plugin_ver == '') || $last_plugin_ver == '131' ) {
+if ( empty($last_plugin_ver) || ($last_plugin_ver == '') || $last_plugin_ver == '132' ) {
         // Mark the need to backup all post_names so far
         update_option( 'longer-permalinks-backup-needed', 1 );
         update_option( 'longer-permalinks-wpver', $current_wp_ver );
