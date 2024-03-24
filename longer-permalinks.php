@@ -10,7 +10,7 @@ In a way that is future WordPress core updates compatible, by extending always t
 
 Author: Giannis Economou with slight modification by Mohammed Nagdy
 
-Version: 1.32
+Version: 1.33
 
 Author URI: http://www.antithesis.gr
 
@@ -19,7 +19,7 @@ Author URI: http://www.antithesis.gr
 
 defined( 'ABSPATH' ) OR exit;
 
-define('LONGER_PERMALINKS_PLUGIN_VERSION', "132");
+define('LONGER_PERMALINKS_PLUGIN_VERSION', "133");
 
 register_activation_hook( __FILE__, 'longer_permalinks_plugin_install' );
 
@@ -31,7 +31,7 @@ $current_db_ver = get_option('db_version');
 
 
 // First install or updating plugin from 1.14- or updating version 1.31
-if ( empty($last_plugin_ver) || ($last_plugin_ver == '') || $last_plugin_ver == '132' ) {
+if ( empty($last_plugin_ver) || ($last_plugin_ver == '') || $last_plugin_ver == '133' ) {
         // Mark the need to backup all post_names so far
         update_option( 'longer-permalinks-backup-needed', 1 );
         update_option( 'longer-permalinks-wpver', $current_wp_ver );
@@ -279,7 +279,7 @@ function longer_permalinks_sanitize_title_with_dashes( $title, $raw_title = '', 
 	// Remove percent signs that are not part of an octet.
 	$title = str_replace( '%', '', $title );
         // Remove question and exclamation marks
-        $title = preg_replace( array('/\?/', '/\؟/', '/\!/'), '', $title );
+        $title = preg_replace( array('/\?/', '/\!/'), '', $title );
 	// Restore octets.
 	$title = preg_replace( '|---([a-fA-F0-9][a-fA-F0-9])---|', '%$1', $title );
 
